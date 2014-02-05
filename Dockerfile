@@ -5,34 +5,22 @@
 FROM       ubuntu
 MAINTAINER Chris Corbyn
 
-RUN apt-get install -qq -y sudo git curl build-essential man
+RUN apt-get install -qq -y sudo git curl build-essential autoconf man
 RUN apt-get install -qq -y libreadline-dev libssl-dev libxml2-dev libxslt-dev
 
 RUN groupadd admin
 RUN useradd -m -s /bin/bash -G admin ruby
 RUN echo ruby:ruby | chpasswd
 
-RUN curl -sLO https://github.com/sstephenson/ruby-build/archive/v20140110.1.tar.gz
-RUN tar xvzf v20140110.1.tar.gz; rm v20140110.1.tar.gz
-RUN cd ruby-build-20140110.1; ./install.sh
-RUN cd/; rm -rf ruby-build-20140110.1
+RUN chgrp -R admin /usr/local
+RUN find /usr/local -type d | xargs chmod g+w
 
-RUN su ruby -c "mkdir ~/.rubies"
-RUN su ruby -c "ruby-build 2.1.0 ~/.rubies/2.1.0"
+ADD ruby-build.tar.gz /tmp/
+RUN cd /tmp/ruby-build-*; ./install.sh
+RUN cd /tmp; rm -rf ruby-build-*
 
-RUN su ruby -c "ln -s ~/.rubies/2.1.0 ~/.rubies/default"
-RUN su ruby -c "ln -s ~/.rubies/default/bin ~/bin"
-
-RUN curl -sLO https://github.com/postmodern/chruby/archive/v0.3.8.tar.gz
-RUN tar xvzf v0.3.8.tar.gz; rm v0.3.8.tar.gz
-RUN cd chruby-0.3.8; make install
-RUN cd /; rm -rf chruby-0.3.8
-
-RUN su ruby -c 'echo "source /usr/local/share/chruby/chruby.sh" >> ~/.bashrc'
-RUN su ruby -c 'echo "source /usr/local/share/chruby/auto.sh" >> ~/.bashrc'
-RUN su ruby -c 'echo "chruby 2.1.0" >> ~/.bashrc'
-
-RUN su ruby -c "~/bin/gem install bundler pry"
+RUN su ruby -c "ruby-build 2.1.0 /usr/local"
+RUN su ruby -c "gem install bundler pry --no-rdoc --no-ri"
 
 ENV     HOME /home/ruby
 WORKDIR /home/ruby
