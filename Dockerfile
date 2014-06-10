@@ -2,27 +2,16 @@
 #
 # Provides an environment for running Ruby apps and nothing else.
 
-FROM       ubuntu
-MAINTAINER Chris Corbyn
+FROM       d11wtq/ubuntu
+MAINTAINER Chris Corbyn <chris@w3style.co.uk>
 
-RUN apt-get install -qq -y sudo git curl build-essential autoconf man
-RUN apt-get install -qq -y libreadline-dev libssl-dev libxml2-dev libxslt-dev
+ADD https://github.com/sstephenson/ruby-build/archive/v20140524.tar.gz /tmp/
 
-RUN useradd -m -s /bin/bash ruby
+RUN cd /tmp;                           \
+    sudo chown default: *.tar.gz;      \
+    tar xvzf *.tar.gz; rm -f *.tar.gz; \
+    cd ruby-build*;                    \
+    ./bin/ruby-build 2.1.2 /usr/local; \
+    cd; rm -rf /tmp/ruby-build*
 
-RUN chgrp -R ruby /usr/local
-RUN find /usr/local -type d | xargs chmod g+w
-
-ADD ruby-build.tar.gz /tmp/
-RUN cd /tmp/ruby-build-*; ./install.sh
-RUN cd /tmp; rm -rf ruby-build-*
-
-RUN echo "ruby ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ruby
-RUN chmod 0440 /etc/sudoers.d/ruby
-
-ENV     HOME /home/ruby
-WORKDIR /home/ruby
-USER    ruby
-
-RUN ruby-build 2.1.0 /usr/local
 RUN gem install bundler pry --no-rdoc --no-ri
