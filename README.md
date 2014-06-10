@@ -3,10 +3,10 @@
 This is simply a Dockerfile for building a simple docker container that runs
 ruby apps.
 
-> Current ruby version: 2.1.0
+> Current ruby version: 2.1.2
 
 It has ruby installed to /usr/local, and runs apps under a non-root user called
-ruby. Root permissions are not needed to install gems.
+default. Root permissions are not needed to install gems.
 
 Bundler and Pry are pre-installed for convenience. The container does not
 contain anything else.
@@ -16,8 +16,8 @@ levels.
 
 ## Usage
 
-By default, everything runs under an unprivileged user called ruby, with the
-working directory set to /home/ruby.
+By default, everything runs under an unprivileged user called default, with the
+working directory set to /home/default.
 
 If you just want a bash prompt:
 
