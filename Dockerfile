@@ -2,7 +2,7 @@
 #
 # Provides an environment for running Ruby apps and nothing else.
 
-FROM       d11wtq/ubuntu
+FROM       d11wtq/ubuntu:14.04
 MAINTAINER Chris Corbyn <chris@w3style.co.uk>
 
 ADD https://github.com/sstephenson/ruby-build/archive/v20140524.tar.gz /tmp/
