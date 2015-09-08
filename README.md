@@ -3,7 +3,7 @@
 This is simply a Dockerfile for building a simple docker container that runs
 ruby apps.
 
-> Current ruby version: 2.1.2
+> Current ruby version: 2.2.3
 
 It has ruby installed to /usr/local, and runs apps under a non-root user called
 default. Root permissions are not needed to install gems.
